@@ -20,23 +20,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 
 // Key aliases
-#define G_Z LGUI_T(KC_Z)
-#define G_SLSH RGUI_T(KC_SLSH)
-#define A_X LALT_T(KC_X)
-#define A_DOT LALT_T(KC_DOT)
-#define C_C LCTL_T(KC_C)
-#define C_COMM LCTL_T(KC_COMM)
-#define S_V LSFT_T(KC_V)
-#define S_M RSFT_T(KC_M)
+#define MOD_A LGUI_T(KC_A)
+#define MOD_S LALT_T(KC_S)
+#define MOD_D LCTL_T(KC_D)
+#define MOD_F LSFT_T(KC_F)
+#define MOD_SCLN LGUI_T(KC_SCLN)
+#define MOD_L LALT_T(KC_L)
+#define MOD_K LCTL_T(KC_K)
+#define MOD_J LSFT_T(KC_J)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_GRV,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_ESC,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
+       KC_ESC,   MOD_A,   MOD_S,   MOD_D,   MOD_F,    KC_G,                         KC_H,   MOD_J,   MOD_K,   MOD_L, MOD_SCLN, KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,     G_Z,     A_X,     C_C,     S_V,    KC_B,                         KC_N,     S_M,  C_COMM,   A_DOT,  G_SLSH, KC_RSFT,
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                             KC_ESC, KC_TAB,  KC_SPC,     KC_ENT, KC_BSPC, TO(1)
                                       //`--------------------------'  `--------------------------'
@@ -47,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_PIPE, KC_BSLS, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        TO(3),   KC_AT, KC_HASH,  KC_DLR, KC_PERC, XXXXXXX,                      KC_EXLM, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, TO(3),
+        TO(3),   KC_AT, KC_HASH,  KC_DLR, KC_PERC, KC_UNDS,                      KC_EXLM, KC_LPRN, KC_RPRN, KC_LCBR, KC_RCBR, TO(3),
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_EQL, KC_LBRC, KC_RBRC, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
