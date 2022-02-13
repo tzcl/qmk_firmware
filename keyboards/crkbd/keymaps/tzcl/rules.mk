@@ -4,3 +4,5 @@ OLED_DRIVER     = SSD1306
 LTO_ENABLE      = yes
 
 RGBLIGHT_ENABLE = no    # Disable LEDs
+
+SRC += features/caps_word.c
