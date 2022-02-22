@@ -21,12 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 
 // Key aliases
-#define MOD_A LGUI_T(KC_A)
-#define MOD_R LALT_T(KC_R)
+#define MOD_Z LGUI_T(KC_Z)
+#define MOD_X LALT_T(KC_X)
 #define MOD_S LCTL_T(KC_S)
 #define MOD_T LSFT_T(KC_T)
-#define MOD_O LGUI_T(KC_O)
-#define MOD_I LALT_T(KC_I)
+#define MOD_SLSH LGUI_T(KC_SLSH)
+#define MOD_DOT LALT_T(KC_DOT)
 #define MOD_E LCTL_T(KC_E)
 #define MOD_N LSFT_T(KC_N)
 
@@ -40,9 +40,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_ESC,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                         KC_M,    KC_N,    KC_E,    KC_I,    KC_O, KC_SCLN,
+       KC_ESC,    KC_A,    KC_R,   MOD_S,   MOD_T,    KC_G,                         KC_M,   MOD_N,   MOD_E,    KC_I,    KC_O, KC_SCLN,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT,
+      KC_LSFT,   MOD_Z,   MOD_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM, MOD_DOT,MOD_SLSH, KC_RSFT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                            KC_TAB,  KC_ESC,  KC_SPC,    KC_BSPC,   TO(1),  KC_ENT
                                       //`--------------------------'  `--------------------------'
