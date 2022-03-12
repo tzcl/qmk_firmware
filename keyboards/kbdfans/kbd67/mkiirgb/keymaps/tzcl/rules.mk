@@ -1,0 +1,3 @@
+CONSOLE_ENABLE = no
+
+EXTRAFLAGS += -flto
