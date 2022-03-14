@@ -1,4 +1,4 @@
-/*T
+/*
 Copyright 2019 @foostan
 Copyright 2020 Drashna Jaelre <@drashna>
 
@@ -18,46 +18,65 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 #include "features/caps_word.h"
-#include <stdio.h>
+
+// Custom keys
+enum custom_keycodes {
+    BSP_DEL = SAFE_RANGE,
+    CAPS,
+    REP,
+};
 
 // Key aliases
-#define MOD_Z LGUI_T(KC_Z)
-#define MOD_X LALT_T(KC_X)
+#define MOD_A LGUI_T(KC_A)
+#define MOD_R LALT_T(KC_R)
 #define MOD_S LCTL_T(KC_S)
 #define MOD_T LSFT_T(KC_T)
-#define MOD_SLSH LGUI_T(KC_SLSH)
-#define MOD_DOT LALT_T(KC_DOT)
-#define MOD_E LCTL_T(KC_E)
 #define MOD_N LSFT_T(KC_N)
+#define MOD_E LCTL_T(KC_E)
+#define MOD_I LALT_T(KC_I)
+#define MOD_O LGUI_T(KC_O)
 
 #define O_LGUI OSM(MOD_LGUI)
 #define O_LALT OSM(MOD_LALT)
 #define O_LCTL OSM(MOD_LCTL)
 #define O_LSFT OSM(MOD_LSFT)
 
+// Combos
+enum combos_events {
+    CAPS_COMBO,
+    NUM_COMBOS,
+};
+uint16_t COMBO_LEN = NUM_COMBOS;
+
+const uint16_t PROGMEM caps_combo[] = {KC_G, KC_M, COMBO_END};
+
+combo_t key_combos[] = {
+    [CAPS_COMBO] = COMBO(caps_combo, CAPS),
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_MINS,
+       KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_SCLN,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_ESC,    KC_A,    KC_R,   MOD_S,   MOD_T,    KC_G,                         KC_M,   MOD_N,   MOD_E,    KC_I,    KC_O, KC_SCLN,
+       KC_ESC,   MOD_A,   MOD_R,   MOD_S,   MOD_T,    KC_G,                         KC_M,   MOD_N,   MOD_E,   MOD_I,   MOD_O,   TO(1),
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,   MOD_Z,   MOD_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM, MOD_DOT,MOD_SLSH, KC_RSFT,
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_MINS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           KC_TAB,  KC_ESC,  KC_SPC,    KC_BSPC,   TO(1),  KC_ENT
+                                           KC_TAB,  KC_ESC,  KC_SPC,    BSP_DEL,     REP,  KC_ENT
                                       //`--------------------------'  `--------------------------'
 
   ),
 
   [1] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX,   KC_LT,  KC_EQL,   KC_GT, XXXXXXX,                      KC_MINS, KC_AMPR, KC_ASTR, KC_BSLS, KC_PIPE, _______,
+      XXXXXXX, XXXXXXX,   KC_LT,  KC_EQL,   KC_GT, XXXXXXX,                      KC_MINS, KC_AMPR, KC_ASTR, KC_BSLS, KC_PIPE,   TO(3),
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        TO(3), XXXXXXX, KC_LCBR, KC_LPRN, KC_LBRC, KC_UNDS,                      KC_PLUS,  KC_DLR, KC_PERC, KC_CIRC, XXXXXXX, TO(3),
+        TO(0), XXXXXXX, KC_LCBR, KC_LPRN, KC_LBRC, KC_UNDS,                      KC_PLUS,  KC_DLR, KC_PERC, KC_CIRC, XXXXXXX,   TO(2),
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, KC_RCBR, KC_RPRN, KC_RBRC,  KC_EQL,                      KC_SLSH, KC_EXLM,   KC_AT, KC_HASH, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______,   TO(0), _______,    _______,   TO(2), _______
+                                          _______,   TO(0), _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -65,11 +84,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, KC_ASTR,                      KC_MINS,    KC_7,    KC_8,    KC_9, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, KC_UNDS,                      KC_PLUS,    KC_4,    KC_5,    KC_6,    KC_0, XXXXXXX,
+        TO(1), XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, KC_UNDS,                      KC_PLUS,    KC_4,    KC_5,    KC_6,    KC_0,   TO(3),
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, KC_BRID, XXXXXXX, KC_BRIU,  KC_DOT,                       KC_EQL,    KC_1,    KC_2,    KC_3, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            TO(1),   TO(0), _______,    _______,   TO(3), _______
+                                          _______,   TO(0), _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -77,11 +96,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_WBAK, KC_HOME,  KC_END, KC_WFWD, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX,  O_LGUI,  O_LALT,  O_LCTL,  O_LSFT, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
+        TO(2),  O_LGUI,  O_LALT,  O_LCTL,  O_LSFT, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX,   TO(1),
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            TO(2),   TO(0), _______,     KC_ENT,   TO(1), _______
+                                          _______,   TO(0), _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -103,64 +122,17 @@ void oled_render_layer_state(void) {
     oled_write_P(PSTR("Layer: "), false);
     switch (layer_state) {
         case L_BASE:
-            oled_write_ln_P(PSTR("Default"), false);
+            oled_write_ln_P(PSTR("Base"), false);
             break;
         case L_LOWER:
-            oled_write_ln_P(PSTR("Lower"), false);
+            oled_write_ln_P(PSTR("Symbols"), false);
             break;
         case L_RAISE:
-            oled_write_ln_P(PSTR("Raise"), false);
+            oled_write_ln_P(PSTR("Numbers"), false);
             break;
         case L_ADJUST:
-        case L_ADJUST|L_LOWER:
-        case L_ADJUST|L_RAISE:
-        case L_ADJUST|L_LOWER|L_RAISE:
-            oled_write_ln_P(PSTR("Adjust"), false);
+            oled_write_ln_P(PSTR("Nav"), false);
             break;
-    }
-}
-
-
-char keylog_str[24] = {};
-
-const char code_to_name[60] = {
-    ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
-    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-    'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',
-    '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
-
-void set_keylog(uint16_t keycode, keyrecord_t *record) {
-  char name = ' ';
-    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
-  if (keycode < 60) {
-    name = code_to_name[keycode];
-  }
-
-  // update keylog
-  snprintf(keylog_str, sizeof(keylog_str), "%dx%d, k%2d : %c",
-           record->event.key.row, record->event.key.col,
-           keycode, name);
-}
-
-void oled_render_keylog(void) {
-    oled_write(keylog_str, false);
-}
-
-void render_bootmagic_status(bool status) {
-    /* Show Ctrl-Gui Swap options */
-    static const char PROGMEM logo[][2][3] = {
-        {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
-        {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
-    };
-    if (status) {
-        oled_write_ln_P(logo[0][0], false);
-        oled_write_ln_P(logo[0][1], false);
-    } else {
-        oled_write_ln_P(logo[1][0], false);
-        oled_write_ln_P(logo[1][1], false);
     }
 }
 
@@ -176,19 +148,103 @@ void oled_render_logo(void) {
 bool oled_task_user(void) {
     if (is_keyboard_master()) {
         oled_render_layer_state();
-        oled_render_keylog();
     } else {
         oled_render_logo();
     }
     return false;
 }
+#endif // OLED_ENABLE
+
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Keycodes that continue Caps Word, with shift applied.
+        case KC_A ... KC_Z:
+        case KC_MINS:
+            add_weak_mods(MOD_BIT(KC_LSFT)); // Apply shift to the next key.
+            return true;
+
+        // Keycodes that continue Caps Word, without shifting.
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case BSP_DEL:
+        case KC_UNDS:
+            return true;
+
+        default:
+            return false; // Deactivate Caps Word.
+    }
+}
+
+// We don't return anything because we always want to keep processing
+uint16_t process_repeat_key(uint16_t keycode, keyrecord_t* record) {
+    static uint16_t last_keycode = KC_NO;
+
+    if (keycode == REP) {
+        if (record->event.pressed) {
+            register_code16(last_keycode);
+        } else {
+            unregister_code16(last_keycode);
+        }
+        return last_keycode;
+    }
+
+    // Get the base keycode in case MT or LT
+    switch (keycode) {
+        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+            keycode = keycode & 0xFF;
+            break;
+    }
+
+    uint8_t mods = get_mods() | get_oneshot_mods();
+    if (mods & MOD_MASK_CTRL) keycode |= QK_LCTL;
+    if (mods & MOD_MASK_SHIFT) keycode |= QK_LSFT;
+    if (mods & MOD_MASK_GUI) keycode |= QK_LGUI;
+    if (mods & MOD_BIT(KC_LALT)) keycode |= QK_LALT;
+    if (mods & MOD_BIT(KC_RALT)) keycode |= QK_RALT;
+
+    if (record->event.pressed) {
+      last_keycode = keycode;
+    }
+
+    return keycode;
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (!process_caps_word(keycode, record)) { return false; } 
-  if (record->event.pressed) {
-    set_keylog(keycode, record);
-  }
+    if (!process_caps_word(keycode, record)) {
+        return false;
+    }
 
-  return true;
+    keycode = process_repeat_key(keycode, record);
+
+    static uint8_t saved_mods   = 0;
+
+    switch (keycode) {
+        case BSP_DEL:
+            if (record->event.pressed) {
+                saved_mods = get_mods() & MOD_MASK_SHIFT;
+
+                if (saved_mods == MOD_MASK_SHIFT) { /* both shifts pressed */
+                    register_code(KC_DEL);
+                } else if (saved_mods) {  /* one shift pressed */
+                    del_mods(saved_mods); /* remove shift */
+                    register_code(KC_DEL);
+                    add_mods(saved_mods); /* add back shift */
+                } else {
+                    register_code(KC_BSPC);
+                }
+            } else { /* key released */
+                unregister_code(KC_DEL);
+                unregister_code(KC_BSPC);
+            }
+            return false;
+        case CAPS:
+            if (record->event.pressed) {
+                caps_word_set(true);
+            }
+            return false;
+    }
+
+    return true;
 }
-#endif // OLED_ENABLE

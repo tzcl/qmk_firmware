@@ -8,9 +8,6 @@
 
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
 
-#define NO_ACTION_MACRO
-#define NO_ACTION_FUNCTION
-
 #ifdef RGB_MATRIX_ENABLE
 #    define RGB_MATRIX_KEYPRESSES
 #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTIWIDE
@@ -23,3 +20,12 @@
 #    define RGBLIGHT_DISABLE_KEYCODES
 #    define RGB_MATRIX_DISABLE_KEYCODES
 #endif
+
+// Save space
+#define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+#define NO_MUSIC_MODE
+#define LAYER_STATE_8BIT
+
+#undef LOCKING_SUPPORT_ENABLE
+#undef LOCKING_RESYNC_ENABLE
