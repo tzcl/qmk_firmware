@@ -1,8 +1,12 @@
-MOUSEKEY_ENABLE = yes    # Mouse keys
-OLED_ENABLE     = yes
-OLED_DRIVER     = SSD1306
-LTO_ENABLE      = yes
+MOUSEKEY_ENABLE = yes
 
-RGBLIGHT_ENABLE = yes
+OLED_ENABLE = yes
+OLED_DRIVER = SSD1306
+
+CONSOLE_ENABLE = no
+LTO_ENABLE = yes
+
+RGBLIGHT_ENABLE = no
+RGB_MATRIX_ENABLE = yes
 
 SRC += features/caps_word.c
