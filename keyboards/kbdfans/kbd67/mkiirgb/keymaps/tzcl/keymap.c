@@ -4,13 +4,10 @@
 #define CTL_ESC CTL_T(KC_ESC)
 
 enum custom_keycodes {
-  BSP_DEL = SAFE_RANGE,
+    BSP_DEL = SAFE_RANGE,
 };
 
-enum layer_names {
-  BASE,
-  EXTEND
-};
+enum layer_names { BASE, EXTEND };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -37,42 +34,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [EXTEND] = LAYOUT_65_ansi_blocker( /* MO(1) - Fn */
         _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,   KC_F11,  KC_F12,   RESET,  KC_HOME,
-        _______, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, _______, KC_PSCR,  KC_SLCK, KC_PAUS,  KC_DEL,  KC_PGUP,
-        CTL_ESC, RGB_SPI, RGB_SPD, _______, _______, _______, _______, _______, _______, _______, _______,  _______,          EEP_RST,  KC_PGDN,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_PSCR,  KC_SLCK, KC_PAUS,  KC_DEL,  KC_PGUP,
+        CTL_ESC, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,          EEP_RST,  KC_PGDN,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,          KC_VOLU,  KC_MUTE,
         _______, _______, _______,                  _______,             _______,        _______,                    KC_MPRV, KC_VOLD,  KC_MNXT
     )
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  static uint8_t saved_mods = 0;
-  uint16_t     temp_keycode = keycode;
+    static uint8_t saved_mods   = 0;
+    uint16_t       temp_keycode = keycode;
 
-  // Filter out the actual keycode from MT and LT keys.
-  if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) || (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) {
-    temp_keycode &= 0xFF;
-  }
+    // Filter out the actual keycode from MT and LT keys.
+    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) || (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) {
+        temp_keycode &= 0xFF;
+    }
 
-  switch(temp_keycode) {
-    case BSP_DEL:
-      if (record->event.pressed) {
-        saved_mods = get_mods() & MOD_MASK_SHIFT;
+    switch (temp_keycode) {
+        case BSP_DEL:
+            if (record->event.pressed) {
+                saved_mods = get_mods() & MOD_MASK_SHIFT;
 
-	if (saved_mods == MOD_MASK_SHIFT) { /* both shifts pressed */
-	  register_code(KC_DEL);
-	} else if (saved_mods) { /* one shift pressed */
-	  del_mods(saved_mods);	 /* remove shift */
-	  register_code(KC_DEL);
-	  add_mods(saved_mods);  /* add back shift */
-	} else {
-	  register_code(KC_BSPC);
-	}
-      } else { /* key released */
-        unregister_code(KC_DEL);
-	unregister_code(KC_BSPC);
-      }
-      return false;
-  }
+                if (saved_mods == MOD_MASK_SHIFT) { /* both shifts pressed */
+                    register_code(KC_DEL);
+                } else if (saved_mods) {  /* one shift pressed */
+                    del_mods(saved_mods); /* remove shift */
+                    register_code(KC_DEL);
+                    add_mods(saved_mods); /* add back shift */
+                } else {
+                    register_code(KC_BSPC);
+                }
+            } else { /* key released */
+                unregister_code(KC_DEL);
+                unregister_code(KC_BSPC);
+            }
+            return false;
+    }
 
-  return true;
+    return true;
 }
