@@ -1,5 +1,7 @@
-SRC += features/caps_word.c
+RGB_MATRIX_ENABLE = yes
+RGBLIGHT_ENABLE   = no
 
-# Reduce hex file size
 CONSOLE_ENABLE = no
-EXTRAFLAGS += -flto
+LTO_ENABLE     = yes
+
+SRC += features/caps_word.c
