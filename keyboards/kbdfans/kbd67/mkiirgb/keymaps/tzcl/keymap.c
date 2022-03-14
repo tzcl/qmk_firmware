@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "features/caps_word.h"
 
 // Key aliases
 #define CTL_ESC CTL_T(KC_ESC)
@@ -42,6 +43,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!process_caps_word(keycode, record)) {
+        return false;
+    }
+
     static uint8_t saved_mods   = 0;
     uint16_t       temp_keycode = keycode;
 
