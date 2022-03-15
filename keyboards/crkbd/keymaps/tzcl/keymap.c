@@ -27,19 +27,31 @@ enum custom_keycodes {
 };
 
 // Key aliases
-#define MOD_A LGUI_T(KC_A)
-#define MOD_R LALT_T(KC_R)
-#define MOD_S LCTL_T(KC_S)
-#define MOD_T LSFT_T(KC_T)
-#define MOD_N LSFT_T(KC_N)
-#define MOD_E LCTL_T(KC_E)
-#define MOD_I LALT_T(KC_I)
-#define MOD_O LGUI_T(KC_O)
+// TODO move these into keycodes.h
+/* Home row mods */
+#define H_A LGUI_T(KC_A)
+#define H_R LALT_T(KC_R)
+#define H_S LCTL_T(KC_S)
+#define H_T LSFT_T(KC_T)
 
+#define H_N LSFT_T(KC_N)
+#define H_E LCTL_T(KC_E)
+#define H_I LALT_T(KC_I)
+#define H_O LGUI_T(KC_O)
+
+/* One shot mods */
 #define O_LGUI OSM(MOD_LGUI)
 #define O_LALT OSM(MOD_LALT)
 #define O_LCTL OSM(MOD_LCTL)
 #define O_LSFT OSM(MOD_LSFT)
+
+/* Thumb key mods */
+#define T_TAB LT(2, KC_TAB)
+#define T_ESC LT(1, KC_ESC)
+#define T_SPC LT(3, KC_SPC)
+
+#define T_BSPC LT(1, KC_BSPC)
+#define T_ENT LT(3, KC_ENT)
 
 // Combos
 enum combos_events {
@@ -58,26 +70,26 @@ combo_t key_combos[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_SCLN,
+       KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_MINS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        TO(2),   MOD_A,   MOD_R,   MOD_S,   MOD_T,    KC_G,                         KC_M,   MOD_N,   MOD_E,   MOD_I,   MOD_O,   TO(1),
+      KC_LPRN,     H_A,     H_R,     H_S,     H_T,    KC_G,                         KC_M,      H_N,    H_E,     H_I,     H_O, KC_SCLN,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        TO(3),    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_MINS,
+      KC_LBRC,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_EQL,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           KC_TAB,  KC_ESC,  KC_SPC,    KC_BSPC,     REP,  KC_ENT
+                                            T_TAB,  T_ESC,    T_SPC,     T_BSPC,     REP,  T_ENT
                                       //`--------------------------'  `--------------------------'
 
   ),
 
   [1] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX,   KC_LT,  KC_EQL,   KC_GT, XXXXXXX,                      KC_MINS, KC_AMPR, KC_ASTR, KC_BSLS, KC_PIPE,   TO(3),
+      _______, XXXXXXX,   KC_LT,  KC_EQL,   KC_GT, XXXXXXX,                      KC_MINS, KC_AMPR, KC_ASTR, KC_BSLS, KC_PIPE, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        TO(0), XXXXXXX, KC_LCBR, KC_LPRN, KC_LBRC, KC_UNDS,                      KC_PLUS,  KC_DLR, KC_PERC, KC_CIRC, XXXXXXX,   TO(2),
+      _______, XXXXXXX, KC_LCBR, KC_LPRN, KC_LBRC, KC_UNDS,                      KC_PLUS,  KC_DLR, KC_PERC, KC_CIRC, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, KC_RCBR, KC_RPRN, KC_RBRC,  KC_EQL,                      KC_SLSH, KC_EXLM,   KC_AT, KC_HASH, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______,   TO(0), _______,    _______, _______, _______
+                                          _______, XXXXXXX, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -89,7 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, KC_BRID, XXXXXXX, KC_BRIU,  KC_DOT,                       KC_EQL,    KC_1,    KC_2,    KC_3, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______,   TO(0), _______,    _______, _______, _______
+                                          _______, XXXXXXX, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -97,11 +109,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_WBAK, KC_HOME,  KC_END, KC_WFWD, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        TO(2),  O_LGUI,  O_LALT,  O_LCTL,  O_LSFT, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX,   TO(1),
+      XXXXXXX,  O_LGUI,  O_LALT,  O_LCTL,  O_LSFT, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______,   TO(0), _______,    _______, _______, _______
+                                          _______, XXXXXXX, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -300,10 +312,19 @@ bool caps_word_press_user(uint16_t keycode) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static uint8_t saved_mods = 0;
+    static uint8_t  saved_mods = 0;
+    static uint16_t rep_timer  = 0;
 
     if (!process_caps_word(keycode, record)) {
         return false;
+    }
+
+    // Get the base keycode of a mod or layer tap key
+    switch (keycode) {
+        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+            keycode = keycode & 0xFF;
+            break;
     }
 
     switch (keycode) {
