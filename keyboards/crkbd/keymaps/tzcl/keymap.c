@@ -20,9 +20,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "features/caps_word.h"
 #include "features/repeat.h"
 
+// Layers
+enum layers { BASE, SYMS, NUMS, NAV };
+
 // Custom keys
 enum custom_keycodes {
     CAPS = SAFE_RANGE,
+    BSPC,
     REP,
 };
 
@@ -31,11 +35,11 @@ enum custom_keycodes {
 /* Home row mods */
 #define H_A LGUI_T(KC_A)
 #define H_R LALT_T(KC_R)
-#define H_S LCTL_T(KC_S)
-#define H_T LSFT_T(KC_T)
+#define H_S LSFT_T(KC_S)
+#define H_T LCTL_T(KC_T)
 
-#define H_N LSFT_T(KC_N)
-#define H_E LCTL_T(KC_E)
+#define H_N LCTL_T(KC_N)
+#define H_E LSFT_T(KC_E)
 #define H_I LALT_T(KC_I)
 #define H_O LGUI_T(KC_O)
 
@@ -46,12 +50,12 @@ enum custom_keycodes {
 #define O_LSFT OSM(MOD_LSFT)
 
 /* Thumb key mods */
-#define T_TAB LT(2, KC_TAB)
-#define T_ESC LT(1, KC_ESC)
-#define T_SPC LT(3, KC_SPC)
-
-#define T_BSPC LT(1, KC_BSPC)
-#define T_ENT LT(3, KC_ENT)
+#define T_TAB LT(NAV, KC_TAB)
+#define T_ESC LT(NUMS, KC_ESC)
+#define T_SPC LT(SYMS, KC_SPC)
+/* bspc: SYMS */
+/* repeat: NUMS */
+#define T_ENT LT(NAV, KC_ENT)
 
 // Combos
 enum combos_events {
@@ -68,20 +72,20 @@ combo_t key_combos[] = {
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT_split_3x6_3(
+  [BASE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_MINS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LPRN,     H_A,     H_R,     H_S,     H_T,    KC_G,                         KC_M,      H_N,    H_E,     H_I,     H_O, KC_SCLN,
+      KC_LPRN,     H_A,     H_R,     H_S,     H_T,    KC_G,                         KC_M,     H_N,     H_E,     H_I,     H_O, KC_SCLN,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LBRC,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_EQL,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            T_TAB,  T_ESC,    T_SPC,     T_BSPC,     REP,  T_ENT
+                                            T_TAB,  T_ESC,    T_SPC,       BSPC,     REP,   T_ENT
                                       //`--------------------------'  `--------------------------'
 
   ),
 
-  [1] = LAYOUT_split_3x6_3(
+  [SYMS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______, XXXXXXX,   KC_LT,  KC_EQL,   KC_GT, XXXXXXX,                      KC_MINS, KC_AMPR, KC_ASTR, KC_BSLS, KC_PIPE, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -93,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       //`--------------------------'  `--------------------------'
   ),
 
-  [2] = LAYOUT_split_3x6_3(
+  [NUMS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, KC_ASTR,                      KC_MINS,    KC_7,    KC_8,    KC_9, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -105,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       //`--------------------------'  `--------------------------'
   ),
 
-  [3] = LAYOUT_split_3x6_3(
+  [NAV] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_WBAK, KC_HOME,  KC_END, KC_WFWD, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -304,6 +308,7 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_BSPC:
         case KC_DEL:
         case KC_UNDS:
+        case BSPC:
             return true;
 
         default:
@@ -312,8 +317,8 @@ bool caps_word_press_user(uint16_t keycode) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static uint8_t  saved_mods = 0;
-    static uint16_t rep_timer  = 0;
+    static uint8_t  saved_mods  = 0;
+    static uint32_t layer_timer = 0;
 
     if (!process_caps_word(keycode, record)) {
         return false;
@@ -336,28 +341,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 isJumping = false;
             }
             break;
-        case KC_BSPC:
+        case BSPC:
             if (record->event.pressed) {
-                saved_mods = get_mods();
-                if ((saved_mods | get_weak_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT) {
-                    del_oneshot_mods(MOD_MASK_SHIFT);
-                    del_mods(MOD_MASK_SHIFT);
-                    del_weak_mods(MOD_MASK_SHIFT);
-                    register_code(KC_DEL);
-                    register_repeat_key(KC_DEL);
-                    set_mods(saved_mods);
-                } else {
-                    register_code(KC_BSPC);
-                    register_repeat_key(KC_BSPC);
+                layer_timer = timer_read32();
+                layer_on(SYMS);
+                isSneaking = false;
+            } else { /* released */
+                if (timer_elapsed32(layer_timer) < TAPPING_TERM) {
+                    saved_mods = get_mods();
+                    if ((saved_mods | get_weak_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT) {
+                        del_oneshot_mods(MOD_MASK_SHIFT);
+                        del_mods(MOD_MASK_SHIFT);
+                        del_weak_mods(MOD_MASK_SHIFT);
+                        tap_code(KC_DEL);
+                        register_repeat_key(KC_DEL);
+                        set_mods(saved_mods);
+                    } else {
+                        tap_code(KC_BSPC);
+                        register_repeat_key(KC_BSPC);
+                    }
                 }
 
-                isSneaking = true;
-            } else { /* key released */
-                unregister_code(KC_DEL);
-                unregister_code(KC_BSPC);
-
+                layer_off(SYMS);
                 isSneaking = false;
             }
+
             return false;
         case CAPS:
             if (record->event.pressed) {
@@ -365,7 +373,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         case REP:
-            update_repeat_key(record);
+            if (record->event.pressed) {
+                layer_timer = timer_read32();
+                layer_on(NUMS);
+            } else {
+                if (timer_elapsed32(layer_timer) < TAPPING_TERM) {
+                    tap_repeat_key();
+                }
+                layer_off(NUMS);
+            }
             return false;
     }
 

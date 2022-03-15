@@ -37,3 +37,7 @@ void update_key(uint16_t keycode, keyrecord_t *record) {
 void update_repeat_key(keyrecord_t *record) {
     update_key(last_keycode, record);
 }
+
+void tap_repeat_key(void) {
+    tap_code16(last_keycode);
+}
