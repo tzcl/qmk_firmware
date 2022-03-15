@@ -223,37 +223,24 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
         }
     }
 
-    if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
-        anim_timer = timer_read32();
-        animate_luna();
+    // This doesn't timeout because the animation keeps resetting the timer
+    // Thus, we need to manage the timeout ourselves
+    if (current_wpm > 0) {
+        if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
+            anim_timer = timer_read32();
+            animate_luna();
+        }
+        anim_sleep = timer_read32();
+    } else {
+        if (timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
+            anim_sleep = timer_read32();
+            oled_off();
+        }
     }
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     return OLED_ROTATION_270;
-}
-
-#    define L_BASE 0
-#    define L_LOWER 2
-#    define L_RAISE 4
-#    define L_ADJUST 8
-
-void oled_render_layer_state(void) {
-    oled_write_P(PSTR("Layer: "), false);
-    switch (layer_state) {
-        case L_BASE:
-            oled_write_ln_P(PSTR("Base"), false);
-            break;
-        case L_LOWER:
-            oled_write_ln_P(PSTR("Symbols"), false);
-            break;
-        case L_RAISE:
-            oled_write_ln_P(PSTR("Numbers"), false);
-            break;
-        case L_ADJUST:
-            oled_write_ln_P(PSTR("Nav"), false);
-            break;
-    }
 }
 
 bool oled_task_user(void) {
@@ -287,6 +274,7 @@ bool oled_task_user(void) {
         oled_set_cursor(0, 9);
         oled_write("NAV", layer_state == 8);
     }
+
     return false;
 }
 #endif // OLED_ENABLE
