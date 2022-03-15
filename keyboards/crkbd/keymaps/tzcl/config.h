@@ -3,8 +3,7 @@
 #define MASTER_LEFT
 
 #define IGNORE_MOD_TAP_INTERRUPT
-//#define TAPPING_FORCE_HOLD
-//#define TAPPING_TERM 100
+#define TAPPING_TERM 200
 
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
 #define SPLIT_OLED_ENABLE
