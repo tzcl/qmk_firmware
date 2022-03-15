@@ -7,6 +7,9 @@
 //#define TAPPING_TERM 100
 
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
+#define OLED_TIMEOUT 6000
+#define SPLIT_OLED_ENABLE
+#define SPLIT_LAYER_STATE_ENABLE
 
 #ifdef RGB_MATRIX_ENABLE
 #    define RGB_MATRIX_KEYPRESSES

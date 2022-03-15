@@ -6,6 +6,7 @@ COMBO_ENABLE      = yes
 WPM_ENABLE        = yes
 
 SRC += features/caps_word.c
+SRC += features/repeat.c
 
 RGBLIGHT_ENABLE = no
 CONSOLE_ENABLE  = no
