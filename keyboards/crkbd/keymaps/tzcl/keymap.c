@@ -51,10 +51,10 @@ enum custom_keycodes {
 
 /* Thumb key mods */
 #define T_TAB LT(NAV, KC_TAB)
-#define T_ESC LT(NUMS, KC_ESC)
-#define T_SPC LT(SYMS, KC_SPC)
-#define T_BSPC LT(SYMS, KC_BSPC)
-/* repeat: NUMS */
+#define T_ESC LT(SYMS, KC_ESC)
+#define T_SPC LT(NUMS, KC_SPC)
+#define T_BSPC LT(NUMS, KC_BSPC)
+/* repeat: SYMS */
 #define T_ENT LT(NAV, KC_ENT)
 
 // Combos
@@ -87,37 +87,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [SYMS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, XXXXXXX,   KC_LT,  KC_EQL,   KC_GT, XXXXXXX,                      KC_MINS, KC_AMPR, KC_ASTR, KC_BSLS, KC_PIPE, _______,
+      _______, XXXXXXX,  KC_EQL, KC_MINS,   KC_GT,   KC_LT,                      KC_MINS, KC_AMPR, KC_ASTR, KC_BSLS, KC_PIPE, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, KC_LCBR, KC_LPRN, KC_LBRC, KC_UNDS,                      KC_PLUS,  KC_DLR, KC_PERC, KC_CIRC, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, KC_RCBR, KC_RPRN, KC_RBRC,  KC_EQL,                      KC_SLSH, KC_EXLM,   KC_AT, KC_HASH, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______, _______,     KC_DEL, _______, _______
+                                          _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
   [NUMS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, KC_ASTR,                      KC_MINS,    KC_7,    KC_8,    KC_9, XXXXXXX, XXXXXXX,
+      XXXXXXX, XXXXXXX,    KC_9,    KC_8,    KC_7, KC_ASTR,                      KC_MINS,    KC_7,    KC_8,    KC_9, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        TO(1), XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, KC_UNDS,                      KC_PLUS,    KC_4,    KC_5,    KC_6,    KC_0,   TO(3),
+      _______, XXXXXXX,    KC_3,    KC_2,    KC_1, KC_UNDS,                      KC_PLUS,    KC_4,    KC_5,    KC_6,    KC_0, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, XXXXXXX, KC_BRID, XXXXXXX, KC_BRIU,  KC_DOT,                       KC_EQL,    KC_1,    KC_2,    KC_3, XXXXXXX, _______,
+      _______, XXXXXXX,    KC_6,    KC_5,    KC_4,  KC_DOT,                       KC_EQL,    KC_1,    KC_2,    KC_3, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, XXXXXXX, _______,    _______, _______, _______
+                                          _______,    KC_0, _______,     KC_DEL, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
   [NAV] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_WBAK, KC_HOME,  KC_END, KC_WFWD, XXXXXXX, XXXXXXX,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX,    KC_H,    KC_J,    KC_K,    KC_L, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX,  O_LGUI,  O_LALT,  O_LSFT,  O_LCTL, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
+      XXXXXXX,  O_LGUI,  O_LALT,  O_LSFT,  O_LCTL, XXXXXXX,                      XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, KC_WBAK, KC_HOME,  KC_END, KC_WFWD, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, XXXXXXX, _______,    _______, _______, _______
+                                          _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   )
 };
