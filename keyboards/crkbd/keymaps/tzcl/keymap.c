@@ -74,11 +74,11 @@ combo_t key_combos[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_MINS,
+       KC_GRV,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_EQL,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LPRN,     H_A,     H_R,     H_S,     H_T,    KC_G,                         KC_M,     H_N,     H_E,     H_I,     H_O, KC_SCLN,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LBRC,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_EQL,
+      KC_LBRC,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_MINS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                             T_TAB,  T_ESC,    T_SPC,     T_BSPC,     REP,   T_ENT
                                       //`--------------------------'  `--------------------------'
@@ -239,19 +239,18 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
         }
     }
 
-    // This doesn't timeout because the animation keeps resetting the timer
-    // Thus, we need to manage the timeout ourselves
-    if (current_wpm > 0) {
-        if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
+    if (timer_elapsed32(anim_sleep) < OLED_TIMEOUT || current_wpm > 0) {
+        if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) { /* run animation */
             anim_timer = timer_read32();
             animate_luna();
         }
-        anim_sleep = timer_read32();
-    } else {
-        if (timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
-            anim_sleep = timer_read32();
-            oled_off();
+
+        if (current_wpm > 0) {
+            anim_sleep = timer_read32(); /* reset sleep timer */
         }
+    } else {
+        /* We have to manually turn the oleds off since changing frame resets the internal timer */
+        oled_off();
     }
 }
 
@@ -316,19 +315,36 @@ bool caps_word_press_user(uint16_t keycode) {
     }
 }
 
+static void catch_mods(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+        case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+            keycode = keycode & 0xFF;
+            if (record->event.pressed) {
+                isSneaking = true;
+            } else {
+                isSneaking = false;
+            }
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef CONSOLE_ENABLE
+    uprintf("0x%04X\t%u\t%u\t%u\t%b\t0x%02X\t0x%02X\t%u\n", keycode, record->event.key.row, record->event.key.col, get_highest_layer(layer_state), record->event.pressed, get_mods(), get_oneshot_mods(), record->tap.count);
+#endif
     static uint32_t layer_timer = 0;
 
     if (!process_caps_word(keycode, record)) {
         return false;
     }
 
+    catch_mods(keycode, record);
+
     // Get the base keycode of a mod or layer tap key
     switch (keycode) {
         case QK_MOD_TAP ... QK_MOD_TAP_MAX:
         case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
             keycode = keycode & 0xFF;
-            break;
     }
 
     switch (keycode) {
