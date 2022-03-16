@@ -16,7 +16,7 @@ void register_repeat_key(uint16_t keycode) {
     }
 
     // Merge current mod state with keycode
-    uint8_t mods = get_mods() | get_oneshot_mods();
+    uint8_t mods = get_mods() | get_weak_mods();
     if (mods & MOD_MASK_CTRL) keycode |= QK_LCTL;
     if (mods & MOD_MASK_SHIFT) keycode |= QK_LSFT;
     if (mods & MOD_MASK_GUI) keycode |= QK_LGUI;

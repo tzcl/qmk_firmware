@@ -8,6 +8,7 @@
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
 #define SPLIT_OLED_ENABLE
 #define SPLIT_LAYER_STATE_ENABLE
+#define SPLIT_WPM_ENABLE
 
 #ifdef RGB_MATRIX_ENABLE
 #    define RGB_MATRIX_KEYPRESSES
@@ -25,6 +26,7 @@
 // Save space
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
+#define NO_ACTION_ONESHOT
 #define NO_MUSIC_MODE
 #define LAYER_STATE_8BIT
 

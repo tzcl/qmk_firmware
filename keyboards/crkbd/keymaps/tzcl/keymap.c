@@ -26,7 +26,6 @@ enum layers { BASE, SYMS, NUMS, NAV };
 // Custom keys
 enum custom_keycodes {
     CAPS = SAFE_RANGE,
-    BSPC,
     REP,
 };
 
@@ -43,18 +42,12 @@ enum custom_keycodes {
 #define H_I LALT_T(KC_I)
 #define H_O LGUI_T(KC_O)
 
-/* One shot mods */
-#define O_LGUI OSM(MOD_LGUI)
-#define O_LALT OSM(MOD_LALT)
-#define O_LSFT OSM(MOD_LSFT)
-#define O_LCTL OSM(MOD_LCTL)
-
 /* Thumb key mods */
 #define T_TAB LT(NAV, KC_TAB)
-#define T_ESC LT(SYMS, KC_ESC)
-#define T_SPC LT(NUMS, KC_SPC)
-#define T_BSPC LT(NUMS, KC_BSPC)
-/* repeat: SYMS */
+#define T_ESC LT(NUMS, KC_ESC)
+#define T_SPC LT(SYMS, KC_SPC)
+#define T_BSPC LT(SYMS, KC_BSPC)
+#define REP_LAYER NUMS
 #define T_ENT LT(NAV, KC_ENT)
 
 // Combos
@@ -93,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, KC_RCBR, KC_RPRN, KC_RBRC,  KC_EQL,                      KC_SLSH, KC_EXLM,   KC_AT, KC_HASH, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______, _______,    _______, _______, _______
+                                          _______, _______, _______,     KC_DEL, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -105,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX,    KC_6,    KC_5,    KC_4,  KC_DOT,                       KC_EQL,    KC_1,    KC_2,    KC_3, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______,    KC_0, _______,     KC_DEL, _______, _______
+                                          _______,    KC_0, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -113,9 +106,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX,    KC_H,    KC_J,    KC_K,    KC_L, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX,  O_LGUI,  O_LALT,  O_LSFT,  O_LCTL, XXXXXXX,                      XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX,
+      XXXXXXX, KC_LGUI, KC_LALT, KC_LSFT, KC_LCTL, XXXXXXX,                      XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, KC_WBAK, KC_HOME,  KC_END, KC_WFWD, XXXXXXX,
+      AG_TOGG, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, KC_WBAK, KC_HOME,  KC_END, KC_WFWD, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -145,6 +138,12 @@ int current_wpm = 0;
 bool isSneaking = false;
 bool isJumping  = false;
 bool showedJump = true;
+
+// clang-format off
+/* 32 * 14 os logos */
+static const char PROGMEM windows_logo[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xbc, 0xbc, 0xbe, 0xbe, 0x00, 0xbe, 0xbe, 0xbf, 0xbf, 0xbf, 0xbf, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x07, 0x0f, 0x0f, 0x00, 0x0f, 0x0f, 0x1f, 0x1f, 0x1f, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+static const char PROGMEM mac_logo[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0xf0, 0xf8, 0xf8, 0xf8, 0xf0, 0xf6, 0xfb, 0xfb, 0x38, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x07, 0x0f, 0x1f, 0x1f, 0x0f, 0x0f, 0x1f, 0x1f, 0x0f, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 /* logic */
 static void render_luna(int LUNA_X, int LUNA_Y) {
@@ -200,6 +199,7 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
                                                      {
                                                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x40, 0x40, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0xa0, 0x20, 0x40, 0x80, 0xc0, 0x20, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3e, 0x41, 0xf0, 0x04, 0x02, 0x02, 0x02, 0x03, 0x02, 0x02, 0x02, 0x04, 0x04, 0x02, 0x01, 0x00, 0x00, 0x00, 0x04, 0x00, 0x40, 0x40, 0x55, 0x82, 0x7c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x20, 0x30, 0x0c, 0x02, 0x05, 0x09, 0x12, 0x1e, 0x04, 0x18, 0x10, 0x08, 0x10, 0x20, 0x28, 0x34, 0x06, 0x02, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                      }};
+    // clang-format on
 
     /* animation */
     void animate_luna(void) {
@@ -258,36 +258,54 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     return OLED_ROTATION_270;
 }
 
+static void oled_render_master(void) {
+    oled_set_cursor(0, 0);
+    if (keymap_config.swap_lalt_lgui) {
+        oled_write_raw_P(mac_logo, sizeof(mac_logo));
+    } else {
+        oled_write_raw_P(windows_logo, sizeof(windows_logo));
+    }
+
+    oled_set_cursor(0, 3);
+    oled_write_ln_P(PSTR(" MODE"), false);
+
+    render_luna(0, 13);
+}
+
+static void oled_render_slave(void) {
+    oled_set_cursor(0, 3);
+    oled_write("LAYER", false);
+
+    oled_set_cursor(0, 5);
+    oled_write("BASE", layer_state <= 1);
+    oled_set_cursor(0, 6);
+    oled_write("SYMS", layer_state == 2);
+    oled_set_cursor(0, 7);
+    oled_write("NUMS", layer_state == 4);
+    oled_set_cursor(0, 8);
+    oled_write("NAV", layer_state == 8);
+
+    /* wpm counter */
+    uint8_t n = current_wpm;
+    char    wpm_str[4];
+    oled_set_cursor(0, 14);
+    wpm_str[3] = '\0';
+    wpm_str[2] = '0' + n % 10;
+    wpm_str[1] = '0' + (n /= 10) % 10;
+    wpm_str[0] = '0' + n / 10;
+    oled_write(wpm_str, false);
+
+    oled_set_cursor(0, 15);
+    oled_write(" wpm", false);
+}
+
 bool oled_task_user(void) {
     current_wpm = get_current_wpm();
 
     if (is_keyboard_master()) {
-        render_luna(0, 6);
-
-        /* wpm counter */
-        uint8_t n = current_wpm;
-        char    wpm_str[4];
-        oled_set_cursor(0, 14);
-        wpm_str[3] = '\0';
-        wpm_str[2] = '0' + n % 10;
-        wpm_str[1] = '0' + (n /= 10) % 10;
-        wpm_str[0] = '0' + n / 10;
-        oled_write(wpm_str, false);
-
-        oled_set_cursor(0, 15);
-        oled_write(" wpm", false);
+        oled_render_master();
     } else {
-        oled_set_cursor(0, 4);
-        oled_write("LAYER", false);
-
-        oled_set_cursor(0, 6);
-        oled_write("BASE", layer_state <= 1);
-        oled_set_cursor(0, 7);
-        oled_write("SYMS", layer_state == 2);
-        oled_set_cursor(0, 8);
-        oled_write("NUMS", layer_state == 4);
-        oled_set_cursor(0, 9);
-        oled_write("NAV", layer_state == 8);
+        oled_render_slave();
     }
 
     return false;
@@ -307,7 +325,6 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_BSPC:
         case KC_DEL:
         case KC_UNDS:
-        case BSPC:
             return true;
 
         default:
@@ -320,6 +337,7 @@ static void catch_mods(uint16_t keycode, keyrecord_t *record) {
         case QK_MOD_TAP ... QK_MOD_TAP_MAX:
         case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
             keycode = keycode & 0xFF;
+            if (keycode == KC_SPC) break;
             if (record->event.pressed) {
                 isSneaking = true;
             } else {
@@ -350,10 +368,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KC_SPC:
             if (record->event.pressed) {
-                isJumping  = true;
                 showedJump = false;
-            } else {
-                isJumping = false;
             }
             break;
         case KC_BSPC:
@@ -371,12 +386,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case REP:
             if (record->event.pressed) {
                 layer_timer = timer_read32();
-                layer_on(NUMS);
+                layer_on(REP_LAYER);
             } else {
                 if (timer_elapsed32(layer_timer) < TAPPING_TERM) {
                     tap_repeat_key();
                 }
-                layer_off(NUMS);
+                layer_off(REP_LAYER);
             }
             return false;
     }

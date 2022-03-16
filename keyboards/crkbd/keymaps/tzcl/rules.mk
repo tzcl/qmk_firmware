@@ -17,7 +17,7 @@ AUDIO_ENABLE    = no
 
 SPACE_CADET_ENABLE = no
 GRAVE_ESC_ENABLE   = no
-MAGIC_ENABLE       = no
+MAGIC_ENABLE       = yes # for swapping alt/gui
 
 LTO_ENABLE = yes
 
