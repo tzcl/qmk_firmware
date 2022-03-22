@@ -7,6 +7,7 @@ WPM_ENABLE        = yes
 
 SRC += features/caps_word.c
 SRC += features/repeat.c
+SRC += features/gfx.c
 
 RGBLIGHT_ENABLE = no
 CONSOLE_ENABLE  = no
